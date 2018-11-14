@@ -22,21 +22,24 @@ class MyIntentService : IntentService("MyIntentService") {
     override fun onHandleIntent(intent: Intent?) {
         Log.d(TAG, "onHandleIntent")
 
-        var counterInter = Intent(this, MainActivity::class.java)
+
+        val broadcastIntent = Intent()
 
         val action = intent?.action
         if (action == "updateCounter")
         {
-            Log.d(TAG, "Recieved Intent action")
-            for (i : Int in 0..10)
+            Log.d(TAG, "Received Intent action")
+            for (i : Int in 1..100)
             {
                 try {
                     Thread.sleep(1000)
                     counter++
-                    counterInter.putExtra("counter", counter)
-                    startActivity(counterInter)
 
-                    Log.d(TAG, "Counter: " + counter)
+                    broadcastIntent.action = "counterBroadcast"
+                    broadcastIntent.putExtra("counterExtra", counter)
+                    sendBroadcast(broadcastIntent)
+
+                    Log.d(TAG, "Counter: $counter")
                 }catch (e :InterruptedException)
                 {
                     e.printStackTrace()
